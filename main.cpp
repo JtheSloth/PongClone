@@ -349,7 +349,7 @@ void process_input()
         if (keyState[SDL_SCANCODE_DOWN] && !onePlayer && !gameWon) {
             player2Move.y = -1.0f;
         }
-        if (keyState[SDL_SCANCODE_T] && !onePlayer && !gameWon) {
+        if (keyState[SDL_SCANCODE_T] && !gameWon) {
             onePlayer = true;
         }
     }
@@ -377,13 +377,13 @@ void update() {
     player1Matrix = glm::mat4(1.0f);
     player2Matrix = glm::mat4(1.0f);
     netMatrix = glm::mat4(1.0f);
-    if (!gameWon) {
+    if (!gameWon) {//only reset ball 1 matrix if game has not ended
         ball1Matrix = glm::mat4(1.0f);
     }
-    if (ballNum >= 2 && !gameWon) {
+    if (ballNum >= 2 && !gameWon) { // only reset ball 2 matrix if ballNum is at least 2
         ball2Matrix = glm::mat4(1.0f);
     }
-    if (ballNum == 3 && !gameWon) {
+    if (ballNum == 3 && !gameWon) { // only reset ball 3 matrix if ballNum is 3
         ball3Matrix = glm::mat4(1.0f);
     }
     topBarMatrix = glm::mat4(1.0f);
@@ -475,7 +475,7 @@ void update() {
         ball1Move.y = (ball1Pos.y + ballInitialPos.y - player1Pos.y - player1InitialPos.y)* 3.0f;
     }
     //collision detection with player 2
-    xdistance = fabs(ball1Pos.x + ballInitialPos.x - player2Pos.x - player2InitialPos.x)*3.5f - ((ballScale.x + playerScale.x) / 2.0f);
+    xdistance = fabs(ball1Pos.x + ballInitialPos.x - player2Pos.x - player2InitialPos.x)*2.5f - ((ballScale.x + playerScale.x) / 2.0f);
     ydistance = fabs(ball1Pos.y + ballInitialPos.y - player2Pos.y - player2InitialPos.y)*1.25f - ((ballScale.y + playerScale.y) / 2.0f);
     if (xdistance < 0.0 && ydistance < 0.0) {
         //set ballMove.x to xdiff
@@ -486,16 +486,16 @@ void update() {
     //check that ball is within top bound
     if (ball1Pos.y >= topBound) {
         //set ballMove.x to xdiff
-        ball1Move.x = (ball1Pos.x + ballInitialPos.x - topBarInitialPos.x);
+        ball1Move.x = (ball1Pos.x + ballInitialPos.x - 1.25f*topBarInitialPos.x);
         //set ballMove.y to ydiff
-        ball1Move.y = (ball1Pos.y + ballInitialPos.y - topBarInitialPos.y);
+        ball1Move.y = (ball1Pos.y + ballInitialPos.y - 1.25f*topBarInitialPos.y);
     }
     //check that ball is within bottom bound
     if (ball1Pos.y <= bottomBound) {
         //set ballMove.x to xdiff
-        ball1Move.x = (ball1Pos.x + ballInitialPos.x - bottomBarInitialPos.x);
+        ball1Move.x = (ball1Pos.x + ballInitialPos.x - 1.25f*bottomBarInitialPos.x);
         //set ballMove.y to ydiff
-        ball1Move.y = (ball1Pos.y + ballInitialPos.y - bottomBarInitialPos.y);
+        ball1Move.y = (ball1Pos.y + ballInitialPos.y - 1.25f*bottomBarInitialPos.y);
     }
     //check if ball has gone out of bounds
     if (ball1Pos.x < leftBound) { //player 1 loses
@@ -518,7 +518,7 @@ void update() {
             ball2Move.y = (ball2Pos.y + ballInitialPos.y - player1Pos.y - player1InitialPos.y) * 3.0f;
         }
         //collision detection with player 2
-        xdistance = fabs(ball2Pos.x + ballInitialPos.x - player2Pos.x - player2InitialPos.x) * 3.5f - ((ballScale.x + playerScale.x) / 2.0f);
+        xdistance = fabs(ball2Pos.x + ballInitialPos.x - player2Pos.x - player2InitialPos.x) * 2.5f - ((ballScale.x + playerScale.x) / 2.0f);
         ydistance = fabs(ball2Pos.y + ballInitialPos.y - player2Pos.y - player2InitialPos.y) * 1.25f - ((ballScale.y + playerScale.y) / 2.0f);
         if (xdistance < 0.0 && ydistance < 0.0) {
             //set ballMove.x to xdiff
@@ -529,16 +529,16 @@ void update() {
         //check that ball is within top bound
         if (ball2Pos.y >= topBound) {
             //set ballMove.x to xdiff
-            ball2Move.x = (ball2Pos.x + ballInitialPos.x - topBarInitialPos.x);
+            ball2Move.x = (ball2Pos.x + ballInitialPos.x - 1.25f*topBarInitialPos.x);
             //set ballMove.y to ydiff
-            ball2Move.y = (ball2Pos.y + ballInitialPos.y - topBarInitialPos.y);
+            ball2Move.y = (ball2Pos.y + ballInitialPos.y - 1.25f*topBarInitialPos.y);
         }
         //check that ball is within bottom bound
         if (ball2Pos.y <= bottomBound) {
             //set ballMove.x to xdiff
-            ball2Move.x = (ball2Pos.x + ballInitialPos.x - bottomBarInitialPos.x);
+            ball2Move.x = (ball2Pos.x + ballInitialPos.x - 1.25f*bottomBarInitialPos.x);
             //set ballMove.y to ydiff
-            ball2Move.y = (ball2Pos.y + ballInitialPos.y - bottomBarInitialPos.y);
+            ball2Move.y = (ball2Pos.y + ballInitialPos.y - 1.25f*bottomBarInitialPos.y);
         }
         //check if ball has gone out of bounds
         if (ball2Pos.x < leftBound) { //player 1 loses
@@ -562,7 +562,7 @@ void update() {
             ball3Move.y = (ball3Pos.y + ballInitialPos.y - player1Pos.y - player1InitialPos.y) * 3.0f;
         }
         //collision detection with player 2
-        xdistance = fabs(ball3Pos.x + ballInitialPos.x - player2Pos.x - player2InitialPos.x) * 3.5f - ((ballScale.x + playerScale.x) / 2.0f);
+        xdistance = fabs(ball3Pos.x + ballInitialPos.x - player2Pos.x - player2InitialPos.x) * 2.5f - ((ballScale.x + playerScale.x) / 2.0f);
         ydistance = fabs(ball3Pos.y + ballInitialPos.y - player2Pos.y - player2InitialPos.y) * 1.25f - ((ballScale.y + playerScale.y) / 2.0f);
         if (xdistance < 0.0 && ydistance < 0.0) {
             //set ballMove.x to xdiff
@@ -573,16 +573,16 @@ void update() {
         //check that ball is within top bound
         if (ball3Pos.y >= topBound) {
             //set ballMove.x to xdiff
-            ball3Move.x = (ball3Pos.x + ballInitialPos.x - topBarInitialPos.x);
+            ball3Move.x = (ball3Pos.x + ballInitialPos.x - 1.25f*topBarInitialPos.x);
             //set ballMove.y to ydiff
-            ball3Move.y = (ball3Pos.y + ballInitialPos.y - topBarInitialPos.y);
+            ball3Move.y = (ball3Pos.y + ballInitialPos.y - 1.25f*topBarInitialPos.y);
         }
         //check that ball is within bottom bound
         if (ball3Pos.y <= bottomBound) {
             //set ballMove.x to xdiff
-            ball3Move.x = (ball3Pos.x + ballInitialPos.x - bottomBarInitialPos.x);
+            ball3Move.x = (ball3Pos.x + ballInitialPos.x - 1.25f*bottomBarInitialPos.x);
             //set ballMove.y to ydiff
-            ball3Move.y = (ball3Pos.y + ballInitialPos.y - bottomBarInitialPos.y);
+            ball3Move.y = (ball3Pos.y + ballInitialPos.y - 1.25f*bottomBarInitialPos.y);
         }
         //check if ball has gone out of bounds
         if (ball3Pos.x < leftBound) { //player 1 loses
@@ -593,6 +593,12 @@ void update() {
             gameWon = true;
             winner = 1;
         }
+    }
+    //if a player won the game
+    if (gameWon) {
+        //reset player movement
+        player1Move = glm::vec3(0.0f, 0.0f, 0.0f);
+        player2Move = glm::vec3(0.0f, 0.0f, 0.0f);
     }
 
 }
@@ -628,10 +634,11 @@ void render() {
     if (!gameWon) {
             drawObject(ball1Matrix, ball1TextureID);
     }
-    //check for number of balls
+    //only draw ball 2 if the number of balls is at least 2
     if (ballNum >=2 && !gameWon) {
         drawObject(ball2Matrix, ball2TextureID);
     }
+    //only draw ball 3 if the number of balls is 3
     if (ballNum == 3 && !gameWon) {
         drawObject(ball3Matrix, ball3TextureID);
 
